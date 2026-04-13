@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro de Colaborador — BRF</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Arial,sans-serif;background:#f4f6f8;min-height:100vh;padding:2rem 1rem}
+  .container{max-width:740px;margin:0 auto}
+  .header{background:#fff;border-radius:12px;padding:1.5rem;margin-bottom:1rem;border:1px solid #e0e0e0;text-align:center}
+  .header h1{font-size:20px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+  .header p{font-size:13px;color:#666}
+  .progress-wrap{margin-bottom:1rem}
+  .progress-label{font-size:12px;color:#666;margin-bottom:6px}
+  .progress-bar{height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#0066cc;border-radius:3px;transition:width .3s}
+  .card{background:#fff;border-radius:12px;padding:1.5rem;margin-bottom:1rem;border:1px solid #e0e0e0}
+  .card-title{font-size:13px;font-weight:700;color:#0066cc;text-transform:uppercase;letter-spacing:.05em;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid #f0f0f0}
+  .grid{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+  .full{grid-column:span 2}
+  .field{display:flex;flex-direction:column;gap:4px}
+  label{font-size:12px;font-weight:600;color:#444}
+  input,select{width:100%;height:38px;padding:0 10px;font-size:14px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#1a1a1a;outline:none}
+  input:focus,select:focus{border-color:#0066cc;box-shadow:0 0 0 2px rgba(0,102,204,.1)}
+  .req{color:#cc0000}
+  .btn-row{display:flex;gap:8px;justify-content:flex-end;margin-top:1rem}
+  .btn{padding:10px 24px;font-size:14px;font-weight:600;border-radius:8px;cursor:pointer;border:1px solid #ccc;background:#fff;color:#1a1a1a;transition:all .15s}
+  .btn:hover{background:#f4f4f4}
+  .btn-primary{background:#0066cc;color:#fff;border-color:#0066cc}
+  .btn-primary:hover{background:#0052a3}
+  .btn-primary:disabled{background:#aaa;border-color:#aaa;cursor:not-allowed}
+  .step{display:none}
+  .step.active{display:block}
+  .success{display:none;text-align:center;padding:3rem 1rem}
+  .success-icon{width:60px;height:60px;background:#e6f4ea;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:28px}
+  .status{font-size:13px;color:#666;text-align:center;margin-top:8px;min-height:18px}
+  @media(max-width:500px){.grid{grid-template-columns:1fr}.full{grid-column:span 1}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Cadastro de Colaborador</h1>
+    <p>BRF — Preencha todos os campos obrigatórios <span class="req">*</span></p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label" id="prog-label">Etapa 1 de 4 — Endereço</div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:25%"></div></div>
+  </div>
+
+  <!-- Etapa 1 -->
+  <div class="step active" id="step1">
+    <div class="card">
+      <div class="card-title">Endereço</div>
+      <div class="grid">
+        <div class="field"><label>Bairro <span class="req">*</span></label><input type="text" id="Bairro" placeholder="Bairro"></div>
+        <div class="field"><label>CEP <span class="req">*</span></label><input type="text" id="CEP" placeholder="00000-000" maxlength="9"></div>
+        <div class="field"><label>Cidade <span class="req">*</span></label><input type="text" id="Cidade" placeholder="Cidade"></div>
+        <div class="field"><label>Estado <span class="req">*</span></label>
+          <select id="Estado">
+            <option value="">Selecione</option>
+            <option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option>
+            <option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option>
+            <option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option>
+            <option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+            <option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option>
+            <option>SE</option><option>TO</option>
+          </select>
+        </div>
+        <div class="field full"><label>Endereço <span class="req">*</span></label><input type="text" id="Endereco" placeholder="Rua, Avenida..."></div>
+        <div class="field"><label>Número <span class="req">*</span></label><input type="text" id="Numero" placeholder="Nº"></div>
+        <div class="field"><label>Complemento</label><input type="text" id="Complemento" placeholder="Apto, Bloco..."></div>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="goStep(2)">Próximo →</button></div>
+  </div>
+
+  <!-- Etapa 2 -->
+  <div class="step" id="step2">
+    <div class="card">
+      <div class="card-title">Dados Pessoais</div>
+      <div class="grid">
+        <div class="field full"><label>Nome completo <span class="req">*</span></label><input type="text" id="Nome" placeholder="Nome completo"></div>
+        <div class="field"><label>CPF <span class="req">*</span></label><input type="text" id="CPF" placeholder="000.000.000-00" maxlength="14"></div>
+        <div class="field"><label>RG <span class="req">*</span></label><input type="text" id="RG" placeholder="RG"></div>
+        <div class="field"><label>Data de expedição <span class="req">*</span></label><input type="date" id="DataExpedicao"></div>
+        <div class="field"><label>Órgão expeditor <span class="req">*</span></label><input type="text" id="OrgaoExpeditor" placeholder="Ex: SSP/SP"></div>
+        <div class="field"><label>Data de nascimento <span class="req">*</span></label><input type="date" id="DataNascimento"></div>
+        <div class="field"><label>Sexo <span class="req">*</span></label>
+          <select id="Sexo"><option value="">Selecione</option><option>Masculino</option><option>Feminino</option><option>Outro</option></select>
+        </div>
+        <div class="field"><label>Estado civil <span class="req">*</span></label>
+          <select id="EstadoCivil"><option value="">Selecione</option><option>Solteiro(a)</option><option>Casado(a)</option><option>Divorciado(a)</option><option>Viúvo(a)</option><option>União estável</option></select>
+        </div>
+        <div class="field"><label>Nacionalidade <span class="req">*</span></label><input type="text" id="Nacionalidade" placeholder="Ex: Brasileiro(a)"></div>
+        <div class="field"><label>Naturalidade <span class="req">*</span></label><input type="text" id="Naturalidade" placeholder="Cidade de nascimento"></div>
+        <div class="field"><label>Nome da mãe <span class="req">*</span></label><input type="text" id="NomeMae" placeholder="Nome completo da mãe"></div>
+        <div class="field"><label>Nome do pai</label><input type="text" id="NomePai" placeholder="Nome completo do pai"></div>
+        <div class="field full"><label>Nome do cônjuge</label><input type="text" id="NomeConjuge" placeholder="Nome completo do cônjuge"></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="goStep(1)">← Voltar</button>
+      <button class="btn btn-primary" onclick="goStep(3)">Próximo →</button>
+    </div>
+  </div>
+
+  <!-- Etapa 3 -->
+  <div class="step" id="step3">
+    <div class="card">
+      <div class="card-title">Contato</div>
+      <div class="grid">
+        <div class="field"><label>E-mail pessoal <span class="req">*</span></label><input type="email" id="EmailPessoal" placeholder="email@pessoal.com"></div>
+        <div class="field"><label>E-mail comercial</label><input type="email" id="EmailComercial" placeholder="email@empresa.com"></div>
+        <div class="field"><label>Telefone celular <span class="req">*</span></label><input type="tel" id="TelefoneCelular" placeholder="(00) 90000-0000"></div>
+        <div class="field"><label>Telefone residencial</label><input type="tel" id="TelefoneResidencial" placeholder="(00) 0000-0000"></div>
+        <div class="field"><label>Telefone comercial</label><input type="tel" id="TelefoneComercial" placeholder="(00) 0000-0000"></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="goStep(2)">← Voltar</button>
+      <button class="btn btn-primary" onclick="goStep(4)">Próximo →</button>
+    </div>
+  </div>
+
+  <!-- Etapa 4 -->
+  <div class="step" id="step4">
+    <div class="card">
+      <div class="card-title">Dados Profissionais</div>
+      <div class="grid">
+        <div class="field"><label>Colaborador ID</label><input type="text" id="ColaboradorID" placeholder="ID do colaborador"></div>
+        <div class="field"><label>Matrícula</label><input type="text" id="Matricula" placeholder="Matrícula"></div>
+        <div class="field"><label>Empregador <span class="req">*</span></label><input type="text" id="Empregador" placeholder="Nome da empresa"></div>
+        <div class="field"><label>Data de admissão <span class="req">*</span></label><input type="date" id="DataAdmissao"></div>
+        <div class="field"><label>Salário <span class="req">*</span></label><input type="text" id="Salario" placeholder="R$ 0,00"></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="goStep(3)">← Voltar</button>
+      <button class="btn btn-primary" id="btnEnviar" onclick="submitForm()">Enviar cadastro</button>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <!-- Sucesso -->
+  <div class="success" id="success">
+    <div class="card">
+      <div class="success-icon">✓</div>
+      <h3 style="font-size:20px;font-weight:700;margin-bottom:.5rem">Cadastro enviado!</h3>
+      <p style="font-size:14px;color:#666;margin-bottom:1.5rem">Os dados foram salvos na planilha com sucesso.</p>
+      <button class="btn btn-primary" onclick="resetForm()">Novo cadastro</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySYlMKjqx0h0XKCU9wkubD8prFJvLsxauwwUI_zF-xfp_C12vYSkizbYZtSx9NX2tB9g/exec';
+const labels = ['Etapa 1 de 4 — Endereço','Etapa 2 de 4 — Dados pessoais','Etapa 3 de 4 — Contato','Etapa 4 de 4 — Dados profissionais'];
+let current = 1;
+
+function goStep(n){
+  document.getElementById('step'+current).classList.remove('active');
+  current = n;
+  document.getElementById('step'+current).classList.add('active');
+  document.getElementById('prog-label').textContent = labels[n-1];
+  document.getElementById('prog-fill').style.width = (n*25)+'%';
+  window.scrollTo(0,0);
+}
+
+function submitForm(){
+  const btn = document.getElementById('btnEnviar');
+  const status = document.getElementById('status');
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+  status.textContent = 'Aguarde, enviando os dados...';
+
+  const data = {
+    Bairro: document.getElementById('Bairro').value,
+    CEP: document.getElementById('CEP').value,
+    Cidade: document.getElementById('Cidade').value,
+    ColaboradorID: document.getElementById('ColaboradorID').value,
+    Complemento: document.getElementById('Complemento').value,
+    CPF: document.getElementById('CPF').value,
+    DataAdmissao: document.getElementById('DataAdmissao').value,
+    DataExpedicao: document.getElementById('DataExpedicao').value,
+    DataNascimento: document.getElementById('DataNascimento').value,
+    EmailComercial: document.getElementById('EmailComercial').value,
+    EmailPessoal: document.getElementById('EmailPessoal').value,
+    Empregador: document.getElementById('Empregador').value,
+    Endereco: document.getElementById('Endereco').value,
+    Estado: document.getElementById('Estado').value,
+    EstadoCivil: document.getElementById('EstadoCivil').value,
+    Matricula: document.getElementById('Matricula').value,
+    Nacionalidade: document.getElementById('Nacionalidade').value,
+    Naturalidade: document.getElementById('Naturalidade').value,
+    Nome: document.getElementById('Nome').value,
+    NomeConjuge: document.getElementById('NomeConjuge').value,
+    NomeMae: document.getElementById('NomeMae').value,
+    NomePai: document.getElementById('NomePai').value,
+    Numero: document.getElementById('Numero').value,
+    OrgaoExpeditor: document.getElementById('OrgaoExpeditor').value,
+    RG: document.getElementById('RG').value,
+    Salario: document.getElementById('Salario').value,
+    Sexo: document.getElementById('Sexo').value,
+    TelefoneCelular: document.getElementById('TelefoneCelular').value,
+    TelefoneComercial: document.getElementById('TelefoneComercial').value,
+    TelefoneResidencial: document.getElementById('TelefoneResidencial').value
+  };
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  }).then(()=>{
+    document.getElementById('step4').classList.remove('active');
+    document.getElementById('success').style.display = 'block';
+    document.getElementById('prog-fill').style.width = '100%';
+    document.getElementById('prog-label').textContent = 'Concluído!';
+  }).catch(()=>{
+    status.textContent = 'Erro ao enviar. Verifique sua conexão e tente novamente.';
+    btn.disabled = false;
+    btn.textContent = 'Enviar cadastro';
+  });
+}
+
+function resetForm(){
+  document.querySelectorAll('input').forEach(i=>i.value='');
+  document.querySelectorAll('select').forEach(s=>s.selectedIndex=0);
+  document.getElementById('success').style.display='none';
+  current=1;
+  document.getElementById('step1').classList.add('active');
+  document.getElementById('prog-label').textContent=labels[0];
+  document.getElementById('prog-fill').style.width='25%';
+  document.getElementById('btnEnviar').disabled=false;
+  document.getElementById('btnEnviar').textContent='Enviar cadastro';
+  document.getElementById('status').textContent='';
+}
+
+document.getElementById('CEP').addEventListener('input',function(){
+  let v=this.value.replace(/\D/g,'');
+  if(v.length>5)v=v.slice(0,5)+'-'+v.slice(5,8);
+  this.value=v;
+});
+document.getElementById('CPF').addEventListener('input',function(){
+  let v=this.value.replace(/\D/g,'');
+  if(v.length>3)v=v.slice(0,3)+'.'+v.slice(3);
+  if(v.length>7)v=v.slice(0,7)+'.'+v.slice(7);
+  if(v.length>11)v=v.slice(0,11)+'-'+v.slice(11,13);
+  this.value=v;
+});
+</script>
+</body>
+</html>
